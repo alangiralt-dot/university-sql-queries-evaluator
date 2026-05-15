@@ -81,7 +81,8 @@ SELECT d.nombre
 FROM departamento d 
 LEFT JOIN profesor prof ON d.id = prof.id_departamento 
 LEFT JOIN asignatura a ON prof.id_profesor = a.id_profesor 
-WHERE a.id IS NULL;
+GROUP BY d.id, d.nombre
+HAVING COUNT(a.id) = 0;
 
 -- 16. Retorna el nombre total d'alumnes que hi ha. (total)
 SELECT COUNT(*) AS total 
