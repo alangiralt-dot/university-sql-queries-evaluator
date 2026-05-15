@@ -11,16 +11,30 @@ SELECT id, nombre, apellido1, apellido2, fecha_nacimiento FROM persona WHERE tip
 SELECT nombre, apellido1, apellido2, nif FROM persona WHERE tipo = 'profesor' AND telefono IS NULL AND nif LIKE '%K';
 
 -- 5. Retorna el llistat de les assignatures que s'imparteixen en el primer quadrimestre, en el tercer curs del grau que té l'identificador 7. (id, nombre, cuatrimestre, curso, id_grado)
-
+SELECT id, nombre, cuatrimestre, curso, id_grado FROM asignatura WHERE cuatrimestre = 1 AND curso = 3 AND id_grado = 7;
 
 -- 6. Retorna un llistat dels professors/es juntament amb el nom del departament al qual estan vinculats. El llistat ha de retornar quatre columnes, primer cognom, segon cognom, nom i nom del departament. El resultat estarà ordenat alfabèticament de menor a major pels cognoms i el nom. (apellido1, apellido2, nombre, departamento)
-
+SELECT p.apellido1, p.apellido2, p.nombre, d.nombre AS departamento 
+FROM persona p 
+INNER JOIN profesor prof ON p.id = prof.id_profesor 
+INNER JOIN departamento d ON prof.id_departamento = d.id 
+ORDER BY p.apellido1 ASC, p.apellido2 ASC, p.nombre ASC;
 
 -- 7. Retorna un llistat amb el nom de les assignatures, any d'inici i any de fi del curs escolar de l'alumne/a amb NIF 26902806M. (nombre, anyo_inicio, anyo_fin)
-
+SELECT a.nombre, ce.anyo_inicio, ce.anyo_fin 
+FROM persona p 
+INNER JOIN alumno_se_matricula_asignatura am ON p.id = am.id_alumno 
+INNER JOIN asignatura a ON am.id_asignatura = a.id 
+INNER JOIN curso_escolar ce ON am.id_curso_escolar = ce.id 
+WHERE p.nif = '26902806M';
 
 -- 8. Retorna un llistat amb el nom de tots els departaments que tenen professors/es que imparteixen alguna assignatura en el Grau en Enginyeria Informàtica (Pla 2015). (nombre)
-
+SELECT DISTINCT d.nombre 
+FROM departamento d 
+INNER JOIN profesor prof ON d.id = prof.id_departamento 
+INNER JOIN asignatura a ON prof.id_profesor = a.id_profesor 
+INNER JOIN grado g ON a.id_grado = g.id 
+WHERE g.nombre = 'Grado en Ingeniería Informática (Plan 2015)';
 
 -- 9. Retorna un llistat amb tots els alumnes que s'han matriculat en alguna assignatura durant el curs escolar 2018/2019. (nombre, apellido1, apellido2)
 
